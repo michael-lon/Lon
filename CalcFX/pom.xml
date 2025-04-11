@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>pe.edu.upeu</groupId>
-	<artifactId>CalcFX</artifactId>
+	<artifactId>CalcFx</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CalcFX</name>
-	<description>Demo project for Spring Boot</description>
+	<name>CalcFx</name>
+	<description>Calculadora hecha por Iosef Chata Saavedra</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -34,7 +34,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
