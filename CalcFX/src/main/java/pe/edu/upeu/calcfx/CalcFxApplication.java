@@ -24,17 +24,20 @@ public class CalcFxApplication extends Application {
 		launch(args);
 	}
 
+
 	@Override
 	public void init() throws Exception {
 		SpringApplicationBuilder builder = new SpringApplicationBuilder(CalcFxApplication.class);
 		builder.application().setWebApplicationType(WebApplicationType.NONE);
-
 		configurableApplicationContext = builder.run(getParameters().getRaw().toArray(new String[0]));
+
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/calcfx.fxml"));
 
 		fxmlLoader.setControllerFactory(configurableApplicationContext::getBean);
 		parent= fxmlLoader.load();
 	}
+
+
 	@Override
 	public void start(Stage stage) throws Exception {
 
@@ -51,5 +54,6 @@ public class CalcFxApplication extends Application {
 		stage.setScene(scene);
 		stage.setTitle("Spring Java-FX");
 		stage.show();
+
 	}
 }
