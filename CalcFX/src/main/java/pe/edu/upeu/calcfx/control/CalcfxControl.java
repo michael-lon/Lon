@@ -1,18 +1,64 @@
 package pe.edu.upeu.calcfx.control;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import pe.edu.upeu.calcfx.modelo.CalcTO;
+import pe.edu.upeu.calcfx.servicio.CalcReporSql;
+import pe.edu.upeu.calcfx.servicio.CalcServicioI;
+
+import java.util.List;
+import java.util.Properties;
 
 @Controller
 public class CalcfxControl {
 
+    @Autowired
+    CalcServicioI servicioI;
+
+    @FXML
+    TableColumn<CalcTO, Void> opcionesx;
+
+    @FXML
+    TableView<CalcTO> tableView;
+    private ObservableList<CalcTO> datos;
+    List<CalcTO> lista;
+
+    @FXML
+    TableColumn<CalcTO, String> num1x;
+    @FXML
+    TableColumn<CalcTO, String> num2x;
+    @FXML
+    TableColumn<CalcTO, Character> oper;
+    @FXML
+    TableColumn<CalcTO, String> result;
+
     @FXML
     private TextField txtResultado;
 
+    int indexID=-1;
+    int idx=0;
+    boolean edit = true;
+
+    @Autowired
+    CalcReporSql calcReporSql;
+
+    @FXML
+    private void initialize() {
+        listar();
+  }
+
     private void escribirNumero(String numero) {
+        edit= true;
         txtResultado.appendText(numero);
     }
 
@@ -70,7 +116,7 @@ public class CalcfxControl {
 
         if(!txtResultado.getText().isEmpty() && txtResultado.getText().length()>=4){
             char op = txtResultado.getText().charAt(txtResultado.getText().length()-2);
-            if(txtResultado.getText().toString().contentEquals(String.valueOf(op))){
+            if(op!='+' && op!='-'&& op!='/'&& op!='*'){
                 txtResultado.appendText(" " + operador + " ");
             }
         }else{
@@ -118,6 +164,19 @@ public class CalcfxControl {
             }else{
                 txtResultado.setText(String.valueOf(resultado));
             }
+            CalcTO to = new CalcTO();
+            to.setNum1(String.valueOf(num1));
+            to.setNum2(String.valueOf(num2));
+            to.setOperador(operador.charAt(0));
+            to.setResultado(String.valueOf(resultado));
+            if(indexID!=-1){
+                servicioI.update(to,indexID);
+            }else{
+                calcReporSql.guardarCliente(to);
+                servicioI.save(to);
+            }
+            listar();
+    txtResultado.setText("");
 
         } catch (Exception e) {
             txtResultado.setText("Error");
@@ -125,6 +184,82 @@ public class CalcfxControl {
         }
     }
 
+    public void  listar(){
+
+        lista=servicioI.findAll();
+
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        num1x.setCellValueFactory(new PropertyValueFactory<CalcTO,String>("num1"));
+        num1x.setCellFactory(TextFieldTableCell.<CalcTO>forTableColumn());
+
+        num2x.setCellValueFactory(new PropertyValueFactory<CalcTO,String>("num2"));
+        num2x.setCellFactory(TextFieldTableCell.<CalcTO>forTableColumn());
+
+        oper.setCellValueFactory(new PropertyValueFactory<>("operador"));
+        oper.setCellFactory(ComboBoxTableCell.<CalcTO, Character>forTableColumn('+','-','/','*'));
+
+        result.setCellValueFactory(new PropertyValueFactory<CalcTO,String >("resultado"));
+        result.setCellFactory(TextFieldTableCell.<CalcTO>forTableColumn());
+        addActionButtonsToTable();
+
+        //datos = FXCollections.observableArrayList(lista);
+        datos = FXCollections.observableArrayList(calcReporSql.listarEntidad());
+        tableView.setItems(datos);
+
+
+}
+    private void addActionButtonsToTable() {
+        Callback<TableColumn<CalcTO, Void>, TableCell<CalcTO, Void>>
+                cellFactory = param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
+            {
+                editButton.getStyleClass().setAll("btn", "btn-success");
+                editButton.setOnAction(event -> {
+                    CalcTO cal = getTableView().getItems().get(getIndex());
+                    editOperCalc(cal, getIndex());
+                    edit = true;
+                    if (edit){
+                        mostrar(getIndex());
+                    }
+
+                });
+                deleteButton.getStyleClass().setAll("btn", "btn-danger");
+                deleteButton.setOnAction(event -> {
+                    CalcTO cal = getTableView().getItems().get(getIndex());
+                    deleteOperCalc(cal);
+                });
+            }
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox buttons = new HBox(editButton, deleteButton);
+                    buttons.setSpacing(10);
+                    setGraphic(buttons);
+                }
+            }
+        };
+        opcionesx.setCellFactory(cellFactory);
+    }
+
+    public void mostrar(int index){
+        txtResultado.setText("");
+        indexID= index;
+    }
+    public void editOperCalc(CalcTO to, int index){
+        txtResultado.setText(to.getNum1()+ " " + to.getOperador() + " " + to.getNum2());
+        indexID= index;
+        edit = false;
+    }
+    public void deleteOperCalc(CalcTO to){
+        servicioI.delete(to);
+        listar();
+
+    }
 
     @FXML
     private void controlClick(ActionEvent event) {
