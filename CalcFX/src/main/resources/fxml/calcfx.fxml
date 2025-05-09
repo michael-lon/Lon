@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.calcfx.control.CalcfxControl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.calcfx.control.CalcfxControl">
    <children>
       <HBox layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -113,7 +113,7 @@
                         </Button>
                      </children>
                   </GridPane>
-                  <AnchorPane layoutX="8.0" layoutY="246.0" prefHeight="50.0" prefWidth="81.0">
+                  <AnchorPane layoutX="41.0" layoutY="246.0" prefHeight="50.0" prefWidth="81.0">
                      <children>
                         <Button fx:id="btnBin" layoutX="15.0" layoutY="13.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#controlClick" text="BIN" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                            <font>
@@ -121,7 +121,7 @@
                            </font>
                         </Button>
                      </children></AnchorPane>
-                  <AnchorPane layoutX="108.0" layoutY="246.0" prefHeight="50.0" prefWidth="81.0">
+                  <AnchorPane layoutX="184.0" layoutY="246.0" prefHeight="50.0" prefWidth="81.0">
                      <children>
                         <Button fx:id="btnLex" layoutX="15.0" layoutY="13.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#controlClick" text="LEX" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                            <font>
@@ -134,10 +134,13 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                  <TableView layoutX="6.0" layoutY="6.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="14.0">
+                  <TableView fx:id="tableView" layoutX="6.0" layoutY="6.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="14.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn fx:id="num1x" prefWidth="75.0" text="Num1" />
+                        <TableColumn fx:id="oper" prefWidth="75.0" text="Oper" />
+                      <TableColumn fx:id="num2x" prefWidth="75.0" text="Num2" />
+                        <TableColumn fx:id="result" prefWidth="75.0" text="Result" />
+                        <TableColumn fx:id="opcionesx" prefWidth="181.0" text="Opciones" />
                     </columns>
                   </TableView>
                </children></AnchorPane>
